@@ -81,10 +81,19 @@ tipo
 
 lista_variaveis
     :T_IDENTIF
-    { contaVar++;}
-     lista_variaveis
+    { 
+        strcpy(elemTab.id, atomo);
+        elemTab.end = contaVar;
+        insereSimbolo(elemTab);
+        contaVar++;
+    }
+    lista_variaveis
     |T_IDENTIF
-    { contaVar++;}
+    {   strcpy(elemTab.id, atomo);
+        elemTab.end = contaVar;
+        insereSimbolo(elemTab);
+        contaVar++;;
+    }
     ;
 
 lista_comandos
@@ -162,7 +171,12 @@ expressao
 
 termo
     : T_IDENTIF
-        { fprintf(yyout,"\tCRVG\tx\n"); }
+        {
+            int pos = buscaSimbolo(atomo);
+            if (pos == -1)
+                yyerror ("Erro: variavel %s nao declarada");
+            fprintf(yyout,"\tCRVG\t%d\n", tabSimb[pos].end); 
+        }
     | T_NUMERO
         { fprintf(yyout,"\tCRCT\tk\n"); }
     | T_V
