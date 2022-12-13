@@ -14,14 +14,17 @@ int buscaSimbolo(char *id){
     int i;
     for (i = posTab -1; strcmp(tabSimb[i].id, id) && i >= 0; i--)
         ;
-    return -1;
+    if (i == -1)
+        yyerror("Identificador nao encontrado!");
+    return i;
 }
 
 void insereSimbolo (struct elemTabSimbolos elem){
     int i;
     if (posTab == TAM_TAB)
         yyerror("Tabela de Simbolos Cheia!");
-    i = buscaSimbolo(elem.id);
+    for (i = posTab -1; strcmp(tabSimb[i].id, elem.id) && i >= 0; i--)
+        ;
     if (i != -1)
         yyerror("Identificador duplicado!");
     tabSimb[posTab++] = elem;
