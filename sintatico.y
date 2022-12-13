@@ -4,6 +4,7 @@
 #include <stdlib.h>
 
 #include "lexico.c"
+#include "utils.c"
 int contaVar;    
 %}
 
