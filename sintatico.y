@@ -3,7 +3,8 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "lexico.c"    
+#include "lexico.c"
+int contaVar;    
 %}
 
 %token T_PROGRAMA
@@ -49,15 +50,17 @@
 
 %%
 programa 
-    : cabecalho variaveis 
-        { printf("\tAMEM\n"); }
+    : cabecalho
+        { contaVar = 0;}
+    variaveis
+        { fprintf(yyout,"\tAMEM\t%d\n", contaVar); }
     T_INICIO lista_comandos T_FIM
-        { printf("\tDMEM\tx\n\tFIMP\n"); }
+        { fprintf(yyout,"\tDMEM\tx\n\tFIMP\n"); }
     ;
 
 cabecalho
     : T_PROGRAMA T_IDENTIF
-        { printf("\tINPP\n"); }
+        { fprintf(yyout,"\tINPP\n"); }
     ;
 
 variaveis
@@ -76,8 +79,11 @@ tipo
     ;
 
 lista_variaveis
-    : T_IDENTIF lista_variaveis
+    :T_IDENTIF
+    { contaVar++;}
+     lista_variaveis
     |T_IDENTIF
+    { contaVar++;}
     ;
 
 lista_comandos
@@ -99,71 +105,71 @@ entrada_saida
 
 leitura
     : T_LEIA T_IDENTIF
-        { printf("\tLEIA\n\tARZG\tx\n"); }
+        { fprintf(yyout,"\tLEIA\n\tARZG\tx\n"); }
     ;
 
 escrita
     : T_ESCREVA expressao
-        { printf("\tESCR\n"); }
+        { fprintf(yyout,"\tESCR\n"); }
     ;
 
 repeticao
     : T_ENQTO
-        { printf("Lx\tNADA\n"); } 
+        { fprintf(yyout,"Lx\tNADA\n"); } 
     expressao T_FACA
-        { printf("\tDSVF\tLy\n"); } 
+        { fprintf(yyout,"\tDSVF\tLy\n"); } 
     lista_comandos 
     T_FIMENQTO
-        { printf("\tDSVS\tLx\nLy\tNADA\n"); }
+        { fprintf(yyout,"\tDSVS\tLx\nLy\tNADA\n"); }
     ;
 
 selecao
     : T_SE expressao T_ENTAO
-        { printf("\tDSVF\tLx\n"); } 
+        { fprintf(yyout, "\tDSVF\tLx\n"); } 
      lista_comandos T_SENAO
-        { printf("\tDSVS\tLy\nLx\tNADA\n"); } 
+        { fprintf(yyout,"\tDSVS\tLy\nLx\tNADA\n"); } 
      lista_comandos T_FIMSE
-        { printf("Ly\tNADA\n"); }
+        { fprintf(yyout,"Ly\tNADA\n"); }
     ;
 
 atribuicao
     : T_IDENTIF T_ATRIBUICAO expressao
-        { printf("\tARZG\tx\n"); }
+        { fprintf(yyout,"\tARZG\tx\n"); }
     ;
 
 expressao
     : expressao T_VEZES expressao
-        { printf("\tMULT\n"); }
+        { fprintf(yyout,"\tMULT\n"); }
     | expressao T_DIV expressao
-        { printf("\tDIVI\n"); }
+        { fprintf(yyout,"\tDIVI\n"); }
     | expressao T_MAIS expressao
-        { printf("\tSOMA\n"); }
+        { fprintf(yyout,"\tSOMA\n"); }
     | expressao T_MENOS expressao
-        { printf("\tMENOSn"); }
+        { fprintf(yyout,"\tMENOSn"); }
     | expressao T_MAIOR expressao
-        { printf("\tCMMA\n"); }
+        { fprintf(yyout,"\tCMMA\n"); }
     | expressao T_MENOR expressao
-        { printf("\tCMME\n"); }
+        { fprintf(yyout,"\tCMME\n"); }
     | expressao T_IGUAL expressao
-        { printf("\tCMMIG\n"); }
+        { fprintf(yyout,"\tCMMIG\n"); }
     | expressao T_E  expressao
-        { printf("\tCONJ\n"); }
+        { fprintf(yyout,"\tCONJ\n"); }
     | expressao T_OU expressao
-        { printf("\tDISJ\n"); }
+        { fprintf(yyout,"\tDISJ\n"); }
     | termo
     ;
 
 termo
     : T_IDENTIF
-        { printf("\tCRVG\tx\n"); }
+        { fprintf(yyout,"\tCRVG\tx\n"); }
     | T_NUMERO
-        { printf("\tCRCT\tk\n"); }
+        { fprintf(yyout,"\tCRCT\tk\n"); }
     | T_V
-        { printf("\tCRCT\t1\n"); }
+        { fprintf(yyout,"\tCRCT\t1\n"); }
     | T_F
-        { printf("\tCRCT\t0\n"); }
+        { fprintf(yyout,"\tCRCT\t0\n"); }
     | T_NAO termo
-        { printf("\tNEGA\n"); }
+        { fprintf(yyout,"\tNEGA\n"); }
     | T_ABRE expressao T_FECHA
     ;
 
@@ -173,7 +179,7 @@ int main(int argc, char *argv[]){
     char *p, nameIn[100], nameOut[100];
     argv++;
     if (argc < 2){
-        puts("\nCompilador SImples");
+        puts("\nCompilador Simples");
         puts("\n\tUso: ./simples <NOME>[.simples]\n\n");
         exit(10);
     }
