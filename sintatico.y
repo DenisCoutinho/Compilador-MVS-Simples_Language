@@ -80,14 +80,13 @@ tipo
     ;
 
 lista_variaveis
-    :T_IDENTIF
+    : lista_variaveis T_IDENTIF
     { 
         strcpy(elemTab.id, atomo);
         elemTab.end = contaVar;
         insereSimbolo(elemTab);
         contaVar++;
     }
-    lista_variaveis
     |T_IDENTIF
     {   strcpy(elemTab.id, atomo);
         elemTab.end = contaVar;
@@ -115,7 +114,10 @@ entrada_saida
 
 leitura
     : T_LEIA T_IDENTIF
-        { fprintf(yyout,"\tLEIA\n\tARZG\tx\n"); }
+        { 
+            int pos = buscaSimbolo(atomo);
+            fprintf(yyout,"\tLEIA\n\tARZG\t%d\n", tabSimb[pos].end); 
+        }
     ;
 
 escrita
@@ -155,7 +157,7 @@ expressao
     | expressao T_MAIS expressao
         { fprintf(yyout,"\tSOMA\n"); }
     | expressao T_MENOS expressao
-        { fprintf(yyout,"\tMENOSn"); }
+        { fprintf(yyout,"\tSUBT\n"); }
     | expressao T_MAIOR expressao
         { fprintf(yyout,"\tCMMA\n"); }
     | expressao T_MENOR expressao
@@ -173,12 +175,10 @@ termo
     : T_IDENTIF
         {
             int pos = buscaSimbolo(atomo);
-            if (pos == -1)
-                yyerror ("Erro: variavel %s nao declarada");
-            fprintf(yyout,"\tCRVG\t%d\n", tabSimb[pos].end); 
+            fprintf(yyout,"\tCRVG\t%d\n", tabSimb[pos].end);
         }
     | T_NUMERO
-        { fprintf(yyout,"\tCRCT\tk\n"); }
+        { fprintf(yyout,"\tCRCT\t%s\n",atomo); }
     | T_V
         { fprintf(yyout,"\tCRCT\t1\n"); }
     | T_F
@@ -205,11 +205,11 @@ int main(int argc, char *argv[]){
     strcpy(nameOut, argv[0]);
     strcat(nameOut, ".mvs");
     yyin = fopen (nameIn, "rt");
-    if (yyin){
+    if (!yyin){
         puts("Programa fonte não encontrado!");
         exit(20);
     }
     yyout = fopen (nameOut, "wt");
     yyparse();
-    puts("Programa oK!");
+    puts("Programa ok!");
 }
