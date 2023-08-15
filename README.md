@@ -5,7 +5,7 @@ O objetivo desse trabalho é modificar o projeto do compilador para linguagem si
 de permitir a compilação de funções no estilo da linguagem C, com múltiplos pontos de saída
 da função, através do comando retorne.
 
-Função, nas linguagens de programação, é um pedaçoo de código que pode ser invocado em
+Função, nas linguagens de programação, é um pedaço de código que pode ser invocado em
 qualquer lugar do programa com o uso do nome da função. Valores podem ser passados através
 dos parâmetros e o resultado da função é devolvido na expressão em que a função foi chamada.
 Linguagens de programação no estilo de Pascal (Pascal-like) usam um mecanismo de retorno
