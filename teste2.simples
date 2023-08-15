@@ -1,10 +1,17 @@
-programa selecao
-    inteiro a b
-inicio 
-    leia a 
-    leia b
-    se a > b 
-        entao escreva a 
-        senao escreva b     
-    fimse 
+programa teste2
+inteiro x y
+func inteiro maior (inteiro a inteiro b)
+logico c
+inicio
+  c <- a > b
+  se c
+    entao retorne a
+    senao retorne b
+  fimse
+fimfunc
+
+inicio
+  leia x
+  leia y
+  escreva maior (x y)
 fimprograma

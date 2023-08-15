@@ -1,7 +1,14 @@
 programa teste4
-    inteiro a b b
-inicio 
-    leia a 
-    leia b
-    escreva a * b 
+inteiro x
+func inteiro fatorial (inteiro a)
+inicio
+  se a > 0
+    entao retorne a * fatorial (a-1)
+    senao retorne 1
+  fimse
+fimfunc
+
+inicio
+  leia x
+  escreva fatorial (x)
 fimprograma
